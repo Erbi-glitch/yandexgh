@@ -13,13 +13,6 @@ class Example(QWidget):
         super().__init__()
         self.getImage()
         self.initUI()
-        type_map = {
-            '0': 'l=map',  # обычная
-            '1': 'l=map,trf,skl',  # с пробками
-            '2': 'l=sat',  # спутник
-            '3': 'l=sat,skl',  # гибрид
-            '4': 'l=sat,trf,skl'  # гибридная карта с отображением пробок
-        }
 
     def getImage(self):
         type_map = {
