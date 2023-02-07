@@ -31,7 +31,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
             '3': 'l=sat,skl',  # гибрид
             '4': 'l=sat,trf,skl'  # гибридная карта с отображением пробок
         }
-        location = f'москва'
+        location = f'улица Космонавтов город Москва'
         georesponse = requests.get(
             f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={location}&format=json")
         json_response = georesponse.json()
@@ -54,7 +54,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
             q= '3'
         else:
             q= '0'
-        map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn=0.01,0.01&{type_map[q]}"
+        map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn=0.001,0.001&{type_map[q]}&pt={coordinate},comma"
         response = requests.get(map_request)
 
         if not response:
