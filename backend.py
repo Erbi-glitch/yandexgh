@@ -16,10 +16,14 @@ class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        #TEST
+        self.pushButton.clicked.connect(self.start)
+
         self.getImage()
         self.initUI()
 
     def getImage(self):
+
         type_map = {
             '0': 'l=map',  # обычная
             '1': 'l=map,trf,skl',  # с пробками
@@ -42,7 +46,15 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         coordinate = list(toponym_coodrinates.split())
         coordinate = ','.join(coordinate)
         print(coordinate)
-        map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn=0.01,0.01&{type_map['4']}"
+        print(type_map[self.map_type()])
+        q='3232343334'
+        if self.map_sputnik.isChecked():
+            q= '2'
+        elif self.map_hybrid.isChecked():
+            q= '3'
+        else:
+            q= '0'
+        map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn=0.01,0.01&{type_map[q]}"
         response = requests.get(map_request)
 
         if not response:
@@ -70,6 +82,18 @@ class MyWidget(QMainWindow, Ui_MainWindow):
     def closeEvent(self, event):
         """При закрытии формы подчищаем за собой"""
         os.remove(self.map_file)
+
+    def map_type(self):
+        if self.map_sputnik.isChecked():
+            return '2'
+        elif self.map_hybrid.isChecked():
+            return '3'
+        else:
+            return '0'
+    def start(self):
+        self.getImage()
+        self.initUI()
+
 
 
 if __name__ == '__main__':
