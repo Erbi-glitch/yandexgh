@@ -68,6 +68,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         with open(self.map_file, "wb") as file:
             file.write(response.content)
 
+
     def initUI(self):
         self.setGeometry(100, 100, *SCREEN_SIZE)
         self.setWindowTitle('Отображение карты')
