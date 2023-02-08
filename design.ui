@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>796</width>
-    <height>606</height>
+    <width>774</width>
+    <height>608</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -60,7 +60,7 @@
      <string>Сброс</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="map_scheme">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -73,7 +73,7 @@
      <string>Схема</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="map_sputnik">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -86,7 +86,7 @@
      <string>Спутник</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_3">
+   <widget class="QRadioButton" name="map_hybrid">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -177,13 +177,26 @@
      <string>3</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_2">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>100</y>
+      <width>481</width>
+      <height>391</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Ваша карта)</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>796</width>
+     <width>774</width>
      <height>21</height>
     </rect>
    </property>

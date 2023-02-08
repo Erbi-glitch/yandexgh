@@ -1,7 +1,7 @@
 import sys
 import os
 import sys
-
+from PyQt5 import Qt
 import requests
 from PyQt5 import QtCore, QtWidgets
 from PyQt5 import QtCore, QtGui, QtWidgets
@@ -11,16 +11,18 @@ from frontend import Ui_MainWindow
 from random import randint
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QApplication, QWidget, QLabel
+
 SCREEN_SIZE = [700, 600]
+
+
 class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        #TEST
-        self.pushButton.clicked.connect(self.start)
-
-        self.getImage()
-        self.initUI()
+        # TEST
+        self.pushButton.clicked.connect(self.on_load)
+        self.nam = Qt.QNetworkAccessManager()
+        self.nam.finished.connect(self.finish_request)
 
     def getImage(self):
 
@@ -47,42 +49,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         coordinate = ','.join(coordinate)
         print(coordinate)
         print(type_map[self.map_type()])
-        q='3232343334'
-        if self.map_sputnik.isChecked():
-            q= '2'
-        elif self.map_hybrid.isChecked():
-            q= '3'
-        else:
-            q= '0'
-        map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn=0.001,0.001&{type_map[q]}&pt={coordinate},comma"
-        response = requests.get(map_request)
-
-        if not response:
-            print("Ошибка выполнения запроса:")
-            print(map_request)
-            print("Http статус:", response.status_code, "(", response.reason, ")")
-            sys.exit(1)
-
-        # Запишем полученное изображение в файл.
-        self.map_file = "map.png"
-        with open(self.map_file, "wb") as file:
-            file.write(response.content)
-
-
-    def initUI(self):
-        self.setGeometry(100, 100, *SCREEN_SIZE)
-        self.setWindowTitle('Отображение карты')
-
-        ## Изображение
-        self.pixmap = QPixmap(self.map_file)
-        self.image = QLabel(self)
-        self.image.move(250, 80)
-        self.image.resize(400, 400)
-        self.image.setPixmap(self.pixmap)
-
-    def closeEvent(self, event):
-        """При закрытии формы подчищаем за собой"""
-        os.remove(self.map_file)
+        self.map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn=0.001,0.001&{type_map[self.map_type()]}&pt={coordinate},comma"
 
     def map_type(self):
         if self.map_sputnik.isChecked():
@@ -91,10 +58,18 @@ class MyWidget(QMainWindow, Ui_MainWindow):
             return '3'
         else:
             return '0'
-    def start(self):
-        self.getImage()
-        self.initUI()
 
+    def on_load(self):
+        print("Load image")
+        self.getImage()
+        url = self.map_request
+        print(url)
+        self.nam.get(Qt.QNetworkRequest(Qt.QUrl(url)))
+
+    def finish_request(self, reply):
+        img = Qt.QPixmap()
+        img.loadFromData(reply.readAll())
+        self.label_2.setPixmap(img)
 
 
 if __name__ == '__main__':
