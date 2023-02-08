@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>774</width>
-    <height>608</height>
+    <width>777</width>
+    <height>641</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -138,43 +138,43 @@
      <string>Нет</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="map_up">
     <property name="geometry">
      <rect>
-      <x>590</x>
-      <y>520</y>
+      <x>640</x>
+      <y>500</y>
       <width>41</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>1</string>
+     <string>Вверх</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="map_down">
     <property name="geometry">
      <rect>
-      <x>650</x>
-      <y>520</y>
+      <x>640</x>
+      <y>560</y>
       <width>41</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>2</string>
+     <string>Вниз</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_5">
+   <widget class="QPushButton" name="map_left">
     <property name="geometry">
      <rect>
-      <x>710</x>
-      <y>520</y>
+      <x>600</x>
+      <y>530</y>
       <width>41</width>
-      <height>41</height>
+      <height>31</height>
      </rect>
     </property>
     <property name="text">
-     <string>3</string>
+     <string>Лево</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_2">
@@ -190,13 +190,39 @@
      <string>Ваша карта)</string>
     </property>
    </widget>
+   <widget class="QSlider" name="horizontalSlider">
+    <property name="geometry">
+     <rect>
+      <x>200</x>
+      <y>530</y>
+      <width>351</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="map_right">
+    <property name="geometry">
+     <rect>
+      <x>680</x>
+      <y>530</y>
+      <width>41</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Право</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>774</width>
+     <width>777</width>
      <height>21</height>
     </rect>
    </property>

@@ -1,7 +1,7 @@
 import sys
-from PyQt5 import Qt ,QtCore
+from PyQt5 import Qt, QtCore
 import requests
-from PyQt5.QtWidgets import  QMainWindow
+from PyQt5.QtWidgets import QMainWindow
 from frontend import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication
 
@@ -12,21 +12,23 @@ class MyWidget(QMainWindow, Ui_MainWindow):
     def __init__(self):
         super().__init__()
         self.map_scale = 0.001
-        self.map_x=0
-        self.map_y=0
+        self.map_x = 0
+        self.map_y = 0
+        self.map_points = []
+        self.is_find = False
 
         self.setupUi(self)
-        self.pushButton.clicked.connect(self.on_load)
+        self.pushButton.clicked.connect(self.find_point)
+        self.pushButton_2.clicked.connect(self.clear_points)
         self.map_up.clicked.connect(self.map_change_coordinates)
         self.map_down.clicked.connect(self.map_change_coordinates)
         self.map_left.clicked.connect(self.map_change_coordinates)
         self.map_right.clicked.connect(self.map_change_coordinates)
-        self.horizontalSlider.setRange(1,7000)
+        self.horizontalSlider.setRange(1, 7000)
         self.horizontalSlider.setPageStep(1)
         self.horizontalSlider.valueChanged.connect(self.map_change_scale)
         self.nam = Qt.QNetworkAccessManager()
         self.nam.finished.connect(self.finish_request)
-
 
     def getImage(self):
 
@@ -49,16 +51,24 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
         # Координаты:
         toponym_coordinates = toponym["Point"]["pos"].split()
+
         print(toponym_coordinates)
         y = str(float(toponym_coordinates[0]) + self.map_y)
-        x=str(float(toponym_coordinates[1])+self.map_x)
-        print(y,x)
+        x = str(float(toponym_coordinates[1]) + self.map_x)
+        print(toponym_coordinates)
 
-        coordinate = [y,x]
+        coordinate = [y, x]
         coordinate = ','.join(coordinate)
+        if self.is_find:
+            self.map_points.append(','.join(toponym_coordinates))
+            self.is_find = False
         print(coordinate)
         print(type_map[self.map_change_type()])
-        self.map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn={self.map_scale},{self.map_scale}&{type_map[self.map_change_type()]}&pt={coordinate},comma"
+        if self.map_points:
+            self.map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn={self.map_scale},{self.map_scale}&{type_map[self.map_change_type()]}&pt={'~'.join(self.map_points)},comma"
+        else:
+            self.map_request = f"http://static-maps.yandex.ru/1.x/?ll={coordinate}&spn={self.map_scale},{self.map_scale}&{type_map[self.map_change_type()]}"
+        print(self.map_request)
 
     def map_change_type(self):
         if self.map_sputnik.isChecked():
@@ -68,44 +78,30 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         else:
             return '0'
 
-
-
-    def map_change_scale(self,value):
-        self.map_scale=value/1000
+    def map_change_scale(self, value):
+        self.map_scale = value / 1000
         self.on_load()
 
     def map_change_coordinates(self):
         move = self.sender().text()
-        if move == 'Вверх' :
-            self.map_x += 0.0001*self.map_scale*1000
+        if move == 'Вверх':
+            self.map_x += 0.0001 * self.map_scale * 1000
 
         elif move == 'Вниз':
-            self.map_x -= 0.0001*self.map_scale*1000
+            self.map_x -= 0.0001 * self.map_scale * 1000
         elif move == 'Лево':
-            self.map_y -= 0.0001*self.map_scale*1000
+            self.map_y -= 0.0001 * self.map_scale * 1000
         elif move == 'Право':
-            self.map_y += 0.0001*self.map_scale*1000
+            self.map_y += 0.0001 * self.map_scale * 1000
         self.on_load()
 
+    def find_point(self):
+        self.is_find = True
+        self.on_load()
 
-    def keyPressEvent(self, event):
-
-
-
-        if event.key() == QtCore.Qt.Key_F:
-            self.y += 0.00001
-            print(self.y)
-        elif event.key() == QtCore.Qt.Key_S:
-            self.map_y -= 0.00001
-        elif event.key() == QtCore.Qt.Key_A:
-            self.map_x += 0.00001
-        elif event.key() == QtCore.Qt.Key_D:
-            self.map_y += 0.00001
-
-
-
-
-
+    def clear_points(self):
+        self.map_points = []
+        self.on_load()
 
     # code
 
@@ -113,7 +109,6 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         print("Load image")
         self.getImage()
         url = self.map_request
-        print(url)
         self.nam.get(Qt.QNetworkRequest(Qt.QUrl(url)))
 
     def finish_request(self, reply):
