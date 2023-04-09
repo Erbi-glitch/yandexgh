@@ -51,12 +51,12 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
         # Координаты:
         toponym_coordinates = toponym["Point"]["pos"].split()
-
+        print(toponym_address)
         print(toponym_coordinates)
         y = str(float(toponym_coordinates[0]) + self.map_y)
         x = str(float(toponym_coordinates[1]) + self.map_x)
         print(toponym_coordinates)
-
+        self.textBrowser.setText(toponym_address)
         coordinate = [y, x]
         coordinate = ','.join(coordinate)
         if self.is_find:
@@ -100,8 +100,8 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.on_load()
 
     def clear_points(self):
+        self.lineEdit.setText('')
         self.map_points = []
-        self.on_load()
 
     # code
 
