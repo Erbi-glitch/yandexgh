@@ -56,6 +56,17 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         y = str(float(toponym_coordinates[0]) + self.map_y)
         x = str(float(toponym_coordinates[1]) + self.map_x)
         print(toponym_coordinates)
+        print(self.mail_true.isChecked())
+
+        if self.mail_true.isChecked():
+            mail = toponym['metaDataProperty']['GeocoderMetaData']['Address']
+            if 'postal_code' in mail.keys():
+                mail = mail['postal_code']
+            else:
+                mail = 'Нет корректного почтового адреса'
+
+            toponym_address += '\n Почтовый адрес: ' + mail
+
         self.textBrowser.setText(toponym_address)
         coordinate = [y, x]
         coordinate = ','.join(coordinate)

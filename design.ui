@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>777</width>
-    <height>641</height>
+    <height>673</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -99,45 +99,6 @@
      <string>Гибрид</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>520</y>
-      <width>121</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Отображать коорды?</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_4">
-    <property name="geometry">
-     <rect>
-      <x>20</x>
-      <y>540</y>
-      <width>41</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Да</string>
-    </property>
-   </widget>
-   <widget class="QRadioButton" name="radioButton_5">
-    <property name="geometry">
-     <rect>
-      <x>80</x>
-      <y>540</y>
-      <width>41</width>
-      <height>17</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Нет</string>
-    </property>
-   </widget>
    <widget class="QPushButton" name="map_up">
     <property name="geometry">
      <rect>
@@ -214,6 +175,32 @@
     </property>
     <property name="text">
      <string>Право</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="coord_true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>540</y>
+      <width>131</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отображать коорды?</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="mail_true">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>570</y>
+      <width>191</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отображать почтовый адрес?</string>
     </property>
    </widget>
   </widget>
