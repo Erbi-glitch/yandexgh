@@ -24,6 +24,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.map_down.clicked.connect(self.map_change_coordinates)
         self.map_left.clicked.connect(self.map_change_coordinates)
         self.map_right.clicked.connect(self.map_change_coordinates)
+        self.mail_true.stateChanged.connect(self.mail_update)
         self.horizontalSlider.setRange(1, 7000)
         self.horizontalSlider.setPageStep(1)
         self.horizontalSlider.valueChanged.connect(self.map_change_scale)
@@ -126,6 +127,13 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         img = Qt.QPixmap()
         img.loadFromData(reply.readAll())
         self.label_2.setPixmap(img)
+
+    def mail_update(self):
+        try:
+            self.getImage()
+        except:
+            self.textBrowser.setText('Вы не ввели адрес')
+        print('Update')
 
 
 if __name__ == '__main__':
