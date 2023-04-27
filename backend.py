@@ -17,6 +17,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         self.map_points = []
         self.is_find = False
 
+
         self.setupUi(self)
         self.pushButton.clicked.connect(self.find_point)
         self.pushButton_2.clicked.connect(self.clear_points)
