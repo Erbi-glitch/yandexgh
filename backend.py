@@ -4,8 +4,29 @@ import requests
 from PyQt5.QtWidgets import QMainWindow
 from frontend import Ui_MainWindow
 from PyQt5.QtWidgets import QApplication
+from PyQt5.QtCore import Qt as Qt_mouse
+import math
 
 SCREEN_SIZE = [700, 700]
+
+
+def lonlat_distance(a, b):
+    degree_to_meters_factor = 111 * 1000
+    a_lon, a_lat = a
+    b_lon, b_lat = b
+    radians_lattitude = math.radians((a_lat + b_lat) / 2.)
+    lat_lon_factor = math.cos(radians_lattitude)
+    dx = abs(a_lon - b_lon) * degree_to_meters_factor * lat_lon_factor
+    dy = abs(a_lat - b_lat) * degree_to_meters_factor
+    distance = math.sqrt(dx * dx + dy * dy)
+    return distance
+
+
+api_key = "dda3ddba-c9ea-4ead-9010-f43fbc15c6e3"
+search_api_server = "https://search-maps.yandex.ru/v1/"
+
+map_api_server = "http://static-maps.yandex.ru/1.x/"
+geocoder_api_server = "http://geocode-maps.yandex.ru/1.x/"
 
 
 class MyWidget(QMainWindow, Ui_MainWindow):
@@ -100,6 +121,7 @@ class MyWidget(QMainWindow, Ui_MainWindow):
     def map_change_scale(self, value):
 
         self.map_scale = value / 1000
+        self.map_scale = round(self.map_scale, 8)
         print(self.map_scale)
         self.on_load()
 
@@ -146,38 +168,69 @@ class MyWidget(QMainWindow, Ui_MainWindow):
         print('Update')
 
     def mousePressEvent(self, event):
-        if self.point_position_global and 273 < event.x() < 749 and 102 < event.y() < 487:
-            try:
+        if event.button() == Qt_mouse.LeftButton:
 
-                qx = round(self.point_position_x + self.map_scale - (event.x() / 749) * self.map_scale, 7)
-                qy = round(self.point_position_y + self.map_scale - (490 / event.y()) * self.map_scale + 0.0004, 7)
-                # print(self.point_position_x,self.map_scale,(event.x()/749)*self.map_scale*2)
-                print(qx, qy)
-                geocoder_request = f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={str(qy)},{str(qx)}&format=json"
-                response = requests.get(geocoder_request)
-                json_response = response.json()
-                toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
-                toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+            if self.point_position_global and 273 < event.x() < 749 and 102 < event.y() < 487:
+                try:
 
-                print(toponym_address)
-                self.textBrowser.append(f'\n Вы выбрали {toponym_address}')
-                point_position_x = float(self.point_position_global['lowerCorner'].split()[0]) * (
-                        1.01 + self.map_scale / 100)
-                point_position_y = float(self.point_position_global['lowerCorner'].split()[1]) * (
-                        1.01 + self.map_scale / 100)
-                # print(point_position_x,point_position_y, event.x(), event.y())+0.00001
-                '''
-                
-                print(point_position_x,point_position_y)
-                print(point_position_x * (1.01 + self.map_scale / 100),
-                      point_position_y * (1.02 + self.map_scale / 100))
+                    qx = round(self.point_position_x + self.map_scale - (event.x() / 749) * self.map_scale, 7)
+                    qy = round(self.point_position_y + self.map_scale - (490 / event.y()) * self.map_scale + 0.0004, 7)
+                    # print(self.point_position_x,self.map_scale,(event.x()/749)*self.map_scale*2)
+                    print(qx, qy)
+                    geocoder_request = f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={str(qy)},{str(qx)}&format=json"
+                    response = requests.get(geocoder_request)
+                    json_response = response.json()
+                    toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+                    toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+                    print(toponym_address)
+                    self.textBrowser.append(f'\n Вы выбрали {toponym_address}')
 
-                x_kray=point_position_x * (1.01 + self.map_scale / 100)
-                y_kray=point_position_y * (1.02 + self.map_scale / 100)
+                except Exception as e:
+                    print(e)
 
-                print(f"Координаты:{ (event.x() / 487 )* point_position_x * (1.01 + self.map_scale / 100)}, { (749/event.y() ) * point_position_y * (1.02 + self.map_scale / 100)}", )'''
-            except Exception as e:
-                print(e)
+        elif event.button() == Qt_mouse.RightButton:
+            if self.point_position_global and 273 < event.x() < 749 and 102 < event.y() < 487:
+                try:
+
+                    qx = round(self.point_position_x + self.map_scale - (event.x() / 749) * self.map_scale, 7)
+                    qy = round(self.point_position_y + self.map_scale - (490 / event.y()) * self.map_scale + 0.0007, 7)
+                    # print(self.point_position_x,self.map_scale,(event.x()/749)*self.map_scale*2)
+                    print(qx, qy)
+                    geocoder_request = f"http://geocode-maps.yandex.ru/1.x/?apikey=40d1649f-0493-4b70-98ba-98533de7710b&geocode={str(qy)},{str(qx)}&format=json"
+                    response = requests.get(geocoder_request)
+                    json_response = response.json()
+                    toponym = json_response["response"]["GeoObjectCollection"]["featureMember"][0]["GeoObject"]
+                    toponym_address = toponym["metaDataProperty"]["GeocoderMetaData"]["text"]
+
+                    search_params = {
+                        "apikey": api_key,
+                        "text": toponym_address,
+                        "lang": "ru_RU",
+                        "ll": f'{str(qy)},{str(qx)}',
+                        "spn": f'{self.map_scale},{self.map_scale}',
+                        "type": "biz"
+                    }
+                    response = requests.get(search_api_server, params=search_params)
+
+                    json_response = response.json()
+
+                    organization = json_response["features"][0]
+                    org_name = organization["properties"]["CompanyMetaData"]["name"]
+                    org_address = organization["properties"]["CompanyMetaData"]["address"]
+                    point = organization["geometry"]["coordinates"]
+                    org_point = f"{point[0]},{point[1]}"
+
+                    qqqqq = round(lonlat_distance([qy, qx], list(map(float, point))), 3)
+                    print(json_response, qqqqq)
+                    if qqqqq < 100:
+                        self.textBrowser.append(f'\n Вы выбрали \n{org_name}  ')
+
+                    else:
+                        self.textBrowser.append(f'Повторите запрос')
+
+
+                except Exception as e:
+                    print(e)
 
 
 if __name__ == '__main__':
